@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8">
+    <title>ZXC ILYA — JUGGERNAUT DESTROYER</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Press+Start+2P&display=swap');
+
+      body {
+        background: radial-gradient(circle at center, #0f0f1a 0%, #000000 100%);
+        color: #fff;
+        font-family: 'Press Start 2P', monospace;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        overflow-x: hidden;
+      }
+
+      #main {
+        width: 800px;
+        background: rgba(10, 10, 20, 0.9);
+        border: 2px solid #ff0055;
+        border-radius: 4px;
+        overflow: hidden;
+        box-shadow: 0 0 30px rgba(255, 0, 85, 0.3);
+        backdrop-filter: blur(8px);
+        position: relative;
+        transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+
+      #main:hover {
+        transform: scale(1.03) rotate(-0.5deg);
+        box-shadow: 0 0 50px rgba(255, 215, 0, 0.6);
+        border-color: #ffd700;
+      }
+
+      /* Статика-шум поверх карточки */
+      #main::after {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        pointer-events: none;
+        background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noise"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch"%2F%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noise)" opacity="0.15"%2F%3E%3C/svg%3E');
+        opacity: 0.7;
+      }
+
+      #header {
+        padding: 20px;
+        text-align: center;
+        background: linear-gradient(90deg, #111, #000);
+        border-bottom: 2px dashed #ff0055;
+        position: relative;
+      }
+
+      .zxc-tag {
+        display: inline-block;
+        font-size: 14px;
+        padding: 4px 12px;
+        background: #000;
+        color: #ff0055;
+        border: 1px solid #ff0055;
+        font-family: 'Orbitron', sans-serif;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        animation: pulse 2s infinite;
+      }
+
+      .hero-name {
+        font-family: 'Orbitron', sans-serif;
+        font-weight: 900;
+        font-size: 32px;
+        color: #ffd700;
+        text-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+        text-transform: uppercase;
+        margin: 10px 0 0;
+        position: relative;
+      }
+
+      .kill-streak {
+        font-size: 18px;
+        color: #0f0;
+        font-family: 'Orbitron', sans-serif;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      /* Глитч-эффект */
+      .glitch {
+        position: relative;
+        color: #fff;
+      }
+      .glitch::before, .glitch::after {
+        content: attr(data-text);
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        clip: rect(auto, auto, auto, auto);
+        animation: glitch-anim 3s infinite linear alternate-reverse;
+      }
+      .glitch::before { color: #ff0055; mix-blend-mode: screen; }
+      .glitch::after { color: #0ff; mix-blend-mode: screen; }
+
+      @keyframes glitch-anim {
+        0% { clip: rect(10px, auto, 95px, auto); }
+        20% { clip: rect(85px, auto, 25px, auto); }
+        40% { clip: rect(30px, auto, 70px, auto); }
+        60% { clip: rect(5px, auto, 45px, auto); }
+        80% { clip: rect(65px, auto, 15px, auto); }
+        100% { clip: rect(40px, auto, 60px, auto); }
+      }
+
+      @keyframes pulse {
+        0%, 100% { box-shadow: 0 0 8px rgba(255, 0, 85, 0.7); }
+        50% { box-shadow: 0 0 24px rgba(255, 0, 85, 1); }
+      }
+
+      .content-row {
+        display: flex;
+      }
+
+      #photo-container {
+        flex: 1;
+        height: 480px;
+        position: relative;
+        overflow: hidden;
+        background: #000;
+      }
+
+      #photo-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: grayscale(40%) sepia(15%) saturate(300%) contrast(120%);
+        transition: filter 0.4s ease, transform 0.4s ease;
+        transform: scale(1.05);
+      }
+
+      #main:hover #photo-container img {
+        filter: none;
+        transform: scale(1);
+      }
+
+      #photo-container::after {
+        content: '';
+        position: absolute;
+        inset: 12px;
+        border: 2px solid rgba(0, 255, 255, 0.5);
+        pointer-events: none;
+        box-shadow: 0 0 12px rgba(0, 255, 255, 0.4);
+        animation: scanline 4s infinite linear;
+      }
+
+      @keyframes scanline {
+        0% { opacity: 0.2; transform: translateY(-100%); }
+        50% { opacity: 0.8; transform: translateY(100%); }
+        100% { opacity: 0.2; transform: translateY(-100%); }
+      }
+
+      #stats-panel {
+        flex: 1;
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background: rgba(0, 0, 0, 0.4);
+      }
+
+      .stat-item {
+        margin-bottom: 16px;
+        font-size: 18px;
+        color: #ddd;
+        display: flex;
+        justify-content: space-between;
+        border-left: 4px solid #ff0055;
+        padding-left: 12px;
+      }
+
+      .stat-value {
+        color: #ffd700;
+        font-weight: bold;
+        font-family: 'Orbitron', sans-serif;
+      }
+
+      .role-badge {
+        display: block;
+        font-size: 16px;
+        color: #0f0;
+        font-weight: bold;
+        margin-top: 10px;
+        text-transform: uppercase;
+      }
+
+      #footer {
+        padding: 15px;
+        text-align: center;
+        background: linear-gradient(to bottom, rgba(0,0,0,0.8), rgba(0,0,0,1));
+        border-top: 2px dashed #333;
+        font-size: 13px;
+        color: #888;
+      }
+
+      .btn-boost {
+        display: inline-block;
+        margin-top: 20px;
+        padding: 12px 28px;
+        background: #ff0055;
+        color: #fff;
+        text-decoration: none;
+        font-family: 'Orbitron', sans-serif;
+        font-weight: bold;
+        text-transform: uppercase;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s;
+        box-shadow: 0 0 15px rgba(255, 0, 85, 0.6);
+      }
+
+      .btn-boost:hover {
+        background: transparent;
+        color: #ffd700;
+        box-shadow: 0 0 25px rgba(255, 215, 0, 1);
+        transform: scale(1.05);
+      }
+
+      /* Блок с медиа */
+      .media-strip {
+        margin-top: 30px;
+        display: flex;
+        gap: 12px;
+        justify-content: center;
+        padding: 10px;
+        background: rgba(0,0,0,0.7);
+        border-top: 1px solid #333;
+      }
+
+      .media-item {
+        width: 220px;
+        height: 140px;
+        overflow: hidden;
+        border: 2px solid #333;
+        border-radius: 6px;
+        position: relative;
+        background: #000;
+        animation: pop-in 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        opacity: 0;
+      }
+
+      .media-item:nth-child(1) { animation-delay: 0.1s; }
+      .media-item:nth-child(2) { animation-delay: 0.2s; }
+      .media-item:nth-child(3) { animation-delay: 0.3s; }
+
+      .media-item video,
+      .media-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .media-item:hover {
+        border-color: #00ffff;
+        box-shadow: 0 0 18px rgba(0, 255, 255, 0.6);
+        z-index: 10;
+      }
+
+      @keyframes pop-in {
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="main">
+      <div id="header">
+        <span class="zxc-tag">ZXC MODE: ACTIVE</span>
+        <div class="hero-name glitch" data-text="ILYA KOSTENKO">ILYA KOSTENKO</div>
+        <div class="kill-streak">JUGGERNAUT UNSTOPPABLE</div>
+      </div>
+
+      <div class="content-row">
+        <div id="photo-container">
+          <!-- Сюда можно вставить фото Ильи или арт Juggernaut -->
+          <img src="qHq-whZ2SdXQt3nGp0YNA8qpJ_IcTeKJDqIzgOVqBH6JSL5fRkb_o69do7LUZm8raoa_JD8bI6-dipUWxop_3YXW.jpg" alt="Илья Костенко">
+        </div>
+
+        <div id="stats-panel">
+          <div class="stat-item">
+            <span>Роль</span>
+            <span class="stat-value">Керри (Carry)</span>
+          </div>
+          <div class="stat-item">
+            <span>Мейн герой</span>
+            <span class="stat-value">Juggernaut</span>
+          </div>
+          <div class="stat-item">
+            <span>MMR (примерно)</span>
+            <span class="stat-value">4500+</span>
+          </div>
+          <div class="stat-item">
+            <span>Критических ударов</span>
+            <span class="stat-value">999+</span>
+          </div>
+          <span class="role-badge">Статус: Destroyer</span>
+
+          <a href="https://steamcommunity.com/profiles/76561199004267995" class="btn-boost">Заказать буст</a>
+        </div>
+      </div>
+
+      <div id="footer">
+        Контакт: Telegram | VK | Discord
+      </div>
+    </div>
+
+    <!-- Блок с медиа (гифки + видео) -->
+    <div class="media-strip">
+      <!-- Медиа 1: Steam арт/кадр (Juggernaut) -->
+      <div class="media-item">
+        <img src="https://images.steamusercontent.com/ugc/38611227340865709/623AB97C62C02D51E608DA2E485B35E4908E3BB6/?imw=5000&imh=5000&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false" alt="Juggernaut Steam Art">
+      </div>
+
+      <!-- Медиа 2: Локальный GIF -->
+      <!-- Работает только на твоём ПК. Для публикации положи GIF в папку сайта и используй src="загруженное.gif" -->
+      <div class="media-item">
+        <img src="file:///C:/Users/илья/OneDrive/Рабочий%20стол/мой%20сайт/загруженное.gif" alt="Local Gif">
+      </div>
+
+      <!-- Медиа 3: Видео (MP4) вместо GIF -->
+      <div class="media-item">
+        <video autoplay muted loop playsinline poster="https://i.imgur.com/yMjcvlQ.mp4">
+          <source src="https://i.imgur.com/yMjcvlQ.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+  </body>
+</html>
